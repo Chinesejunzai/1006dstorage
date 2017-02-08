@@ -1,8 +1,8 @@
 
 CC=gcc
-CPPFLAGS= -I./include   
+CPPFLAGS= -I./include -I/usr/local/include/hiredis  
 CFLAGS=-Wall 
-LIBS= 
+LIBS= -lhiredis
 
 #找到当前目录下所有的.c文件
 src = $(wildcard *.c)
@@ -16,7 +16,7 @@ fdfs_upload_test=./test/fdfs_test
 
 
 
-target=$(fdfs_upload_test)
+target=$(fdfs_upload_test) $(redis_api_test) $(redis_op_test)
 
 
 ALL:$(target)
@@ -33,6 +33,13 @@ $(obj):%.o:%.c
 $(fdfs_upload_test):./test/fdfs_test.o make_log.o 
 	$(CC) $^ -o $@ $(LIBS)
 
+#redis_api_test程序
+$(redis_api_test):./test/redis_api_test.o  
+	$(CC) $^ -o $@ $(LIBS)
+	
+#redis_op_test程序
+$(redis_op_test):./test/redis_op_test.o make_log.o 
+	$(CC) $^ -o $@ $(LIBS)	
 
 
 
